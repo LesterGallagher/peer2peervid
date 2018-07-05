@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-cast-api-enabled="true">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Peer2Peer vid</title>
+
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Doesnt work?:</h1>
+    <p>chrome://flags/#enable-experimental-web-platform-features</p>
+
+    <div id="initiator-el" class="hidden">
+        <video id="video" controls></video>
+        <br>
+        <video id="other-video" height="120" width="160" autoplay></video>
+        <br>
+        <label for="video-upload">Upload mp4 or WebM video files</label>
+        <br>
+        <input type="file" accept=".mp4,.webm,.MP4,.WEBM" name="video-upload" id="video-upload">
+    </div>
+
+    <div id="puller-el" class="hidden">
+        <video id="puller-video" controls></video>
+        <br>
+    </div>
+
+    <google-cast-launcher></google-cast-launcher>
+
+    <script>
+        window['__onGCastApiAvailable'] = function (isAvailable) {
+            if (isAvailable) {
+                initializeCastApi();
+            }
+        };
+    </script>
+
+    <script src="http://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+    <script src="socket.io.client.slim.js"></script>
+    <script src="socket.js"></script>
+    <script src="simple-peer.js"></script>
+    <script src="main.js"></script>
+    <script src="cast.js"></script>
+</body>
+
+</html>
