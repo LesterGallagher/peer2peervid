@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        .log {
+            border: 1px solid #ccc;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <code id="errors">
+    </code>
+
+    <script src="socket.io.client.slim.js"></script>
+    <script>
+        var url = 'https://ess-server.herokuapp.com/api/apps-debugging/no-persist-open-chat';
+        var oldlogs = [];
+
+        var socket = io(url);
+        var errors = document.getElementById('errors');
+        socket.on('connect', function () {
+            var nickname = Math.random().toString(36);
+            socket.emit('init', {
+                nickname: 'sender',
+                room: 'default'
+            }, function () {
+                socket.on('msg', function(data) {
+                    errors.innerHTML += '<pre class="log">' + JSON.stringify(data, null, 4) + '\n</pre>';
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,11 +1,11 @@
 
 function initializeCastApi() {
 
-    var id = '1E47F841' || chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID;
+    var id = chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID;
     cast.framework.CastContext.getInstance()
         .setOptions({
-            receiverApplicationId: id,
-            autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+            receiverApplicationId: '1E47F841',
+            // autoJoinPolicy: chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
         });
 
     cast.framework.CastContext.getInstance()

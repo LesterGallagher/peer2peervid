@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>WebRTC sample with Chromecast</title>
+    <style>
+        #display {
+            position: absolute;
+            top: 30px;
+            left: 50px;
+            bottom: 30px;
+            right: 50px;
+            color: #ff0000;
+            opacity: 0.5;
+            white-space: normal;
+        }
+
+        video {
+            /*display: none;*/
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            object-fit: fill;
+        }
+    </style>
+    <script src="socket.io.client.slim.js"></script>
+    <script>
+        (function () {
+            var url = 'https://ess-server.herokuapp.com/api/apps-debugging/no-persist-open-chat';
+            var oldlogs = [];
+
+            var socket = io(url);
+            socket.on('connect', function () {
+                var nickname = Math.random().toString(36);
+                socket.emit('init', {
+                    nickname: 'receiver application',
+                    room: 'default'
+                }, function () {
+                    oldlogs.forEach(function (log) { socket.emit('msg', log) });
+                    oldlogs = null;
+                });
+            });
+
+            window.addEventListener('error', function (e) {
+                console.log('on error', e);
+            });
+
+            window.log = function () {
+                if (oldlogs) oldlogs.push(arguments);
+                else socket.emit('msg', arguments);
+            }
+
+            window.addEventListener('error', function (e) {
+                var msg = e.filename + ': timestamp(' + e.timeStamp + '), ' + e.message + ', at: lineno: ' + e.lineno;
+                window.log(msg, e);
+            });
+        })();
+    </script>
+    <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+    <script src="simple-peer.js"></script>
+    <script src="socket-receiver.js"></script>
+    <script src="receiver.js"></script>
+</head>
+
+<body>
+    <video id="local"></video>
+    <div id="remotes"></div>
+    <div id="display"></div>
+</body>
+<html>
